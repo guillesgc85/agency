@@ -1,0 +1,392 @@
+{
+	"info": {
+		"_postman_id": "3b2e5796-baea-4f83-b590-4e6f67bfa3f2",
+		"name": "360.agency",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "dealer",
+			"item": [
+				{
+					"name": "create dealer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.globals.set(\"dealer_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"AutoBerlin\",\n    \"ads_limit\":3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/dealer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"dealer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "handle tiler limit - UNPUBLISH_THE_OLDEST",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"handler_limit\":\"UNPUBLISH_THE_OLDEST\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/dealer/:dealer_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"dealer",
+								":dealer_id"
+							],
+							"variable": [
+								{
+									"key": "dealer_id",
+									"value": "6139e535-8346-4713-af09-176135b54cc4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "handle tiler limit - ERROR_MESSAGE",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"handler_limit\":\"ERROR_MESSAGE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/dealer/:dealer_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"dealer",
+								":dealer_id"
+							],
+							"variable": [
+								{
+									"key": "dealer_id",
+									"value": "6139e535-8346-4713-af09-176135b54cc4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "advertisement",
+			"item": [
+				{
+					"name": "create ads",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.globals.set(\"new_ads_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dealer_id\": \"{{dealer_id}}\",\n    \"vehicle\": \"{{$randomWord}}\",\n    \"price\":\"{{$randomPrice}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ads",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ads"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "publish ads",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{new_ads_id}}\",\n  \"dealer_id\": \"{{dealer_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ads/publish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ads",
+								"publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unpublish ads",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"{{new_ads_id}}\",\n    \"dealer_id\": \"{{dealer_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ads/unpublish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ads",
+								"unpublish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get ads PUBLISH",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ads/by/:dealer_id/dealer/:state/state",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ads",
+								"by",
+								":dealer_id",
+								"dealer",
+								":state",
+								"state"
+							],
+							"variable": [
+								{
+									"key": "dealer_id",
+									"value": "{{dealer_id}}"
+								},
+								{
+									"key": "state",
+									"value": "PUBLISH"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get ads DRAFT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ads/by/:dealer_id/dealer/:state/state",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ads",
+								"by",
+								":dealer_id",
+								"dealer",
+								":state",
+								"state"
+							],
+							"variable": [
+								{
+									"key": "dealer_id",
+									"value": "{{dealer_id}}"
+								},
+								{
+									"key": "state",
+									"value": "DRAFT"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update ads",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"id\": \"{{new_ads_id}}\",\n   \"dealer_id\": \"{{dealer_id}}\",\n    \"vehicle\": \"BMW X0 Models\",\n    \"price\": \"$35.050 USD\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ads",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ads"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "actuator",
+			"item": [
+				{
+					"name": "health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logfile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/actuator/logfile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"actuator",
+								"logfile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "actuator",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/actuator",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"actuator"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
